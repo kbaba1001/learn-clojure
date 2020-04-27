@@ -3,10 +3,10 @@
 
 (defn maxs [x arr]
   (apply max (for [y (range (count arr))]
-    (apply + (take x (drop y (cycle arr)))))))
+               (apply + (take x (drop y (cycle arr)))))))
 
 (apply +
-  (for [x (range 2 36)
-        :let [e-max (maxs x europe)
-              a-max (maxs x american)]]
-    (if (< e-max a-max) 1 0)))
+       (for [x (range 2 36)
+             :let [e-max (maxs x europe)
+                   a-max (maxs x american)]]
+         (if (< e-max a-max) 1 0)))
