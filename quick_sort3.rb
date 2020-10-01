@@ -1,11 +1,11 @@
 def qsort(data)
   stack = [[0, (data.length - 1)]]
-  ptr = 1
-  while ptr > 0 do
-    ptr -= 1
-    pleft = left = stack[ptr][0]
-    pright = right = stack[ptr][1]
-    pivot = data[(pleft + pright) / 2]
+  while stack.length > 0 do
+    left, right = stack.pop
+    pleft = left
+    pright = right
+    # pivot = data[(pleft + pright) / 2]
+    pivot = data[0]
 
     # pivotの入れ替え
     x1 = data[pleft]
@@ -35,12 +35,10 @@ def qsort(data)
       break if pleft <= right
     end
     if (left < pright)
-      stack[ptr] = [left, pright]
-      ptr += 1
+      stack.push([left, pright])
     end
     if (pleft < right)
-      stack[ptr] = [pleft, right]
-      ptr += 1
+      stack.push([pleft, right])
     end
   end
 
