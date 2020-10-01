@@ -6,7 +6,6 @@
           res (next arr)
           left (qsort (filter #(> % pivot) res))
           right (qsort (filter #(<= % pivot) res))]
-      (println left pivot right)
       (flatten (conj left pivot right)))))
 
 (qsort [3, 2, 5, 4, 1, 2])

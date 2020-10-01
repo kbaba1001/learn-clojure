@@ -22,19 +22,22 @@ def qsort(data)
     end
 
     loop do
+      # pivotより大きい値を左から探す
       while data[pleft] < pivot do
         pleft += 1
       end
+      # pivotより小さい値を右から探す
       while data[pright] > pivot do
         pright -= 1
       end
+
       if (pleft <= pright)
         data[pleft], data[pright] = swap(data[pleft], data[pright])
         pleft += 1
         pright -= 1
       end
 
-      break unless pleft <= pright
+      break if pright < pleft
     end
     if (left < pright)
       stack.push([left, pright])
