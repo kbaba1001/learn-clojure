@@ -14,19 +14,20 @@ def qsort(data)
     end
 
     if right.length > 1
+      stack.push([pivot])
       stack.push(right)
     end
 
-    if right.length == 1 && left.length == 1
+    if right.length <= 1 && left.length <= 1
       result.unshift(right.first)
       result.unshift(pivot)
       result.unshift(left.first)
     else
-      if right.length == 1
+      if right.length <= 1
         result.unshift(right.first)
         result.unshift(pivot)
       end
-      if left.length == 1
+      if left.length <= 1
         result.unshift(pivot)
         result.unshift(left.first)
       end
