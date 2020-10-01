@@ -1,3 +1,7 @@
+def swap(a, b)
+  [b, a]
+end
+
 def qsort(data)
   stack = [[0, (data.length - 1)]]
   while stack.length > 0 do
@@ -13,7 +17,7 @@ def qsort(data)
     if (pivot <= x1 && x1 <= x2) || (x2 <= x1 && x1 <= pivot)
       pivot = x1
     end
-    if (pivot <= x2 && x2 <= x1)||(x1 <= x2 && x2 <= pivot)
+    if (pivot <= x2 && x2 <= x1) || (x1 <= x2 && x2 <= pivot)
       pivot = x2
     end
 
@@ -25,14 +29,12 @@ def qsort(data)
         pright -= 1
       end
       if (pleft <= pright)
-        tmp = data[pleft]
-        data[pleft] = data[pright]
-        data[pright] = tmp
+        data[pleft], data[pright] = swap(data[pleft], data[pright])
         pleft += 1
         pright -= 1
       end
 
-      break if pleft <= right
+      break unless pleft <= pright
     end
     if (left < pright)
       stack.push([left, pright])
