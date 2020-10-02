@@ -4,14 +4,11 @@ def qsort(data)
   result = []
 
   while !stack.empty? do
-    sleep 1
-    puts "aaaaaaaaaaaaaaa"
-    p target = stack.pop
-    p pivot = target.first
-    p rest = target[1..-1]
-    p left = rest.select {|v| v < pivot }
-    p right = rest.select {|v| v >= pivot }
-    p result
+    target = stack.pop
+    pivot = target.first
+    rest = target[1..-1]
+    left = rest.select {|v| v < pivot }
+    right = rest.select {|v| v >= pivot }
 
     if left.empty? && right.empty?
       result.unshift(pivot)
