@@ -40,10 +40,65 @@
 ;; A: 
 ;; B: 
 ;; C: 3 2 1
+;; 
+;; n = 1
+;; ------
+;; A: 1
+;; B:
+;; C:
+;; ------
+;; A:
+;; B:
+;; C: 1
+;; 
+;; n = 2
+;; ------
+;; A: 2 1
+;; B:
+;; C:
+;; ------
+;; A: 2
+;; B:
+;; C: 1
+;; (A -> C)
+;; ------
+;; A: 
+;; B: 2
+;; C: 1
+;; (A -> B)
+;; ------
+;; A: 1
+;; B: 2
+;; C: 
+;; (C -> A)
+;; ------
+;; A: 1
+;; B: 
+;; C: 2
+;; (B -> C)
+;; ------
+;; A: 
+;; B: 
+;; C: 2 1
+;; (A -> C)
 
 (defn hanoi
-  ([n] (hanoi n (reverse (range 1 (inc n))) () ()))
+  ([n] (hanoi n (vec (reverse (range 1 (inc n)))) [] []))
   ([n a b c]
-   (printf "A: %s\nB: %s\nC: %s" a b c)))
+   (println "A: " a "\nB: " b "\nC: " c "\n---------")
+   (let [va (vec a)
+         vb (vec b)
+         vc (vec c)]
+     (when-not (= (count vc) n)
+    ;;  a = 2, b = 0, c = 1
+       ;; TODO nil を 0 にするアプローチダメそう
+       (if (< ((fnil identity 0) (last vc)) (last va))
+         (hanoi n (take (dec (count va)) va) vb (conj vc (last va)))
+         (if (< ((fnil identity 0) (last vb)) (last va))
+           (hanoi n (take (dec (count va)) va) (conj vb (last va)) vc)
+           (if (< ((fnil identity 0) (last va)) (last vc))
+             (hanoi n (conj va (last vc)) vb (take (dec (count vc)) vc))
+             (when (< ((fnil identity 0) (last vc)) (last vb))
+               (hanoi n va (take (dec (count vb)) vb) (conj vc (last vb)))))))))))
 
-(hanoi 3)
+(hanoi 2)
