@@ -51,20 +51,21 @@
 ;; B:
 ;; C: 1
 ;; 
+;; (n & (n-1)) % 3 番目の棒にある円盤を ((n| (n-1)) +1) %3 番目の棒に移動する
 ;; n = 2
 ;; ------
-;; A: 2 1
-;; B:
-;; C:
+;; A: 2 1  (0)
+;; B:      (0)
+;; C:      (0)
 ;; ------
-;; A: 2
-;; B:
-;; C: 1
+;; A: 2    (0)
+;; B: 0    (0)
+;; C: 1    (1)
 ;; (A -> C)
 ;; ------
-;; A: 
-;; B: 2
-;; C: 1
+;; A: 2    (0)
+;; B: 1    (1)
+;; C:      (0)
 ;; (A -> B)
 ;; ------
 ;; A: 1
@@ -82,23 +83,19 @@
 ;; C: 2 1
 ;; (A -> C)
 
+;; ((m & (m-1)) % 3) - 1 番目の棒にある円盤を (((m| (m-1)) +1) %3) - 1 番目の棒に移動する
 (defn hanoi
-  ([n] (hanoi n (vec (reverse (range 1 (inc n)))) [] []))
-  ([n a b c]
-   (println "A: " a "\nB: " b "\nC: " c "\n---------")
-   (let [va (vec a)
-         vb (vec b)
-         vc (vec c)]
-     (when-not (= (count vc) n)
-    ;;  a = 2, b = 0, c = 1
-       ;; TODO nil を 0 にするアプローチダメそう
-       (if (< ((fnil identity 0) (last vc)) (last va))
-         (hanoi n (take (dec (count va)) va) vb (conj vc (last va)))
-         (if (< ((fnil identity 0) (last vb)) (last va))
-           (hanoi n (take (dec (count va)) va) (conj vb (last va)) vc)
-           (if (< ((fnil identity 0) (last va)) (last vc))
-             (hanoi n (conj va (last vc)) vb (take (dec (count vc)) vc))
-             (when (< ((fnil identity 0) (last vc)) (last vb))
-               (hanoi n va (take (dec (count vb)) vb) (conj vc (last vb)))))))))))
+  ([n] (hanoi n 0 [(atom (vec (reverse (range 1 (inc n))))) (atom []) (atom [])]))
+  ([n m [[a b c] :as sticks]]
+   (println "A: " @a "\nB: " @b "\nC: " @c "\n---------")
+   (when-not (or (= (count @c) n) (< m 10))
+     (let [from-index (dec (mod (bit-and m (dec m)) n))
+           to-index (dec (mod (inc (bit-or m (dec m))) n))
+           from-arr (get sticks from-index)
+           to-arr (get sticks to-index)
+           from-value (last @from-arr)]
+       (reset! from-arr (vec (take (dec (count @from-arr)) @from-arr)))
+       (swap! to-arr conj from-value)
+       (hanoi n (inc m) sticks)))))
 
 (hanoi 2)
